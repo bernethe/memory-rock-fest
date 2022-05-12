@@ -1,0 +1,17 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+    font-family: "Titan One";
+}
+.bg-main {
+    background-image: url(@/Assets/bg.png);
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.btn-shadow {
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), inset 0 0 10px 10px rgba(0,0,0,0.15);;
+}
