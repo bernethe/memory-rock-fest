@@ -18,6 +18,8 @@ const Game = ({page, setPage}) => {
 	const MAX_MOVES = 10;
 	const MAX_PAIRS = 3;
 
+	let myTimer = null;
+
 	const shuffleArray = (array) => {
 		for (let i = array.length - 1; i > 0; i--) {
 			const j = Math.floor(Math.random() * (i + 1));
@@ -40,13 +42,45 @@ const Game = ({page, setPage}) => {
 	];
 
 	const [moves, setMoves] = useState(0);
-	const [pairs, setPairs] = useState(0);
+	const [pairs, setPairs] = useState([]);
 	const [flipped, setFlipped] = useState([]);
+	const [isClickable, setIsClickable] = useState(true);
+	const [myCards, setMyCards] = useState([]);
+
+	useEffect(() => {
+		setMyCards(shuffleArray(cards));
+	}, []);
 
 	useEffect(() => {
 		if(flipped.length === 2) {
+			setIsClickable(false);
+			setMoves(moves + 1);
+			if(flipped[0].pair === flipped[1].pair) {
+				setPairs([...pairs, flipped[0].pair]);
+			}
+			clearTimeout(myTimer);
+			myTimer = setTimeout(() => {
+				setFlipped([]);
+				setIsClickable(true);
+			}, 2000);
 		}
 	}, [flipped]);
+
+
+	useEffect(() => {
+		// console.log(pairs.length, MAX_PAIRS);
+		if(pairs.length === MAX_PAIRS) {
+			clearTimeout(myTimer);
+			myTimer = setTimeout(() => {
+				setPage(2);
+			}, 2000);
+		} else if(moves === MAX_MOVES) {
+			clearTimeout(myTimer);
+			myTimer = setTimeout(() => {
+				setPage(3);
+			}, 2000);
+		}
+	}, [pairs, moves]);
 
 	return <div className='w-full h-full flex flex-col'>
 		<div className='flex flex-grow-0 justify-center items-center py-8'>
@@ -54,15 +88,15 @@ const Game = ({page, setPage}) => {
 		</div>
 		<div className='flex flex-wrap flex-grow justify-center items-center'>
 			{
-				shuffleArray(cards).map((card, index) => {
-					return <Card key={index} card={card} flipped={flipped} setFlipped={setFlipped} />
+				myCards.map((card, index) => {
+					return <Card key={index} card={card} flipped={flipped} setFlipped={setFlipped} isClickable={isClickable} pairs={pairs} />
 				})
 			}
 		</div>
 		<div className='flex flex-grow-0 justify-center items-center py-12'>
 			<div className='flex flex-grow flex-col text-pink-600 text-3xl px-12'>
 				<p>Movimientos: {moves} de {MAX_MOVES}</p>
-				<p>Parejas: {pairs} de {MAX_PAIRS}</p>
+				<p>Parejas: {pairs.length} de {MAX_PAIRS}</p>
 			</div>
 			<div className='flex flex-grow-0 px-12'>
 				<button
