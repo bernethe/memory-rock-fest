@@ -26,7 +26,7 @@ const Card = ({card, flipped, setFlipped, isClickable, pairs}) => {
 		}
 	}
 
-	return <button className={ `w-[360px] h-[360px] px-8 py-4 flip-card ${ classFlip }` } onClick={ handleClick }>
+	return <button className={ `w-1/3 aspect-square px-1 py-4 md:px-8 flip-card ${ classFlip }` } onClick={ handleClick }>
 		<div className="flip-card-inner">
 			<div className="flip-card-front">
 				<img src={ backCard } alt='' />

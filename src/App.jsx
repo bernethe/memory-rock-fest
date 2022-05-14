@@ -15,9 +15,14 @@ const App = () => {
 		<Loose page={page} setPage={setPage} />
 	];
 
-	return <div className='mx-auto w-[1080px] h-[1920px] bg-main flex'>
-		{ pages[page] }
-	</div>
+	return <>
+		<div className='portrait w-full h-full flex flex-col'>
+			{ pages[page] }
+		</div>
+		<div className='landscape w-full h-full text-xl text-shadow-lg flex justify-center items-center'>
+			Esta app funciona solamente en formato vertical
+		</div>
+	</>
 }
 
 export default App

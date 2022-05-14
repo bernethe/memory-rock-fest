@@ -3,19 +3,19 @@ import logo from '../../Assets/loose.png';
 import btn from '../../Assets/btn-again.png';
 
 const Loose = ({page, setPage}) => {
-	return <div className='w-full h-full flex flex-col'>
-		<div className='flex flex-grow justify-center items-center'>
+	return <>
+	<div className='flex justify-center items-center h-[65vh]'>
 			<div><img src={logo} alt='Rock Fest' className='w-1/2 mx-auto' /></div>
 		</div>
-		<div className='flex flex-grow-0 py-64'>
+		<div className='flex justify-center items-center h-[35vh]'>
 			<button
-				className='bg-white w-[560px] h-[150px] mx-auto rounded-2xl btn-shadow'
+				className='bg-white w-1/2 h-auto mx-auto rounded-2xl btn-shadow'
 				onClick={() => setPage(0)}
 			>
 				<img src={btn} alt='Start playing' />
 			</button>
 		</div>
-	</div>
+	</>
 }
 
 export default Loose

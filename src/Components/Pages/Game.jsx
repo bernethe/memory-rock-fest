@@ -12,11 +12,16 @@ import Card02Es from '../../Assets/card-2-es.png';
 import Card03Es from '../../Assets/card-3-es.png';
 import Card04Es from '../../Assets/card-4-es.png';
 import Card05Es from '../../Assets/card-5-es.png';
+import RightSFX from '../../Assets/right.mp3';
+import WrongSFX from '../../Assets/wrong.mp3';
 
 const Game = ({page, setPage}) => {
 
-	const MAX_MOVES = 10;
+	const MAX_MOVES = 6;
 	const MAX_PAIRS = 3;
+	const TIMER_INTERVAL = 5000;
+	const RIGHT_SFX = new Audio(RightSFX);
+	const WRONG_SFX = new Audio(WrongSFX);
 
 	let myTimer = null;
 
@@ -55,14 +60,19 @@ const Game = ({page, setPage}) => {
 		if(flipped.length === 2) {
 			setIsClickable(false);
 			setMoves(moves + 1);
+			clearTimeout(myTimer);
 			if(flipped[0].pair === flipped[1].pair) {
 				setPairs([...pairs, flipped[0].pair]);
-			}
-			clearTimeout(myTimer);
-			myTimer = setTimeout(() => {
+				RIGHT_SFX.play();
 				setFlipped([]);
 				setIsClickable(true);
-			}, 2000);
+			} else {
+				WRONG_SFX.play();
+				myTimer = setTimeout(() => {
+					setFlipped([]);
+					setIsClickable(true);
+				}, TIMER_INTERVAL);
+			}
 		}
 	}, [flipped]);
 
@@ -73,41 +83,41 @@ const Game = ({page, setPage}) => {
 			clearTimeout(myTimer);
 			myTimer = setTimeout(() => {
 				setPage(2);
-			}, 2000);
+			}, TIMER_INTERVAL);
 		} else if(moves === MAX_MOVES) {
 			clearTimeout(myTimer);
 			myTimer = setTimeout(() => {
 				setPage(3);
-			}, 2000);
+			}, TIMER_INTERVAL);
 		}
 	}, [pairs, moves]);
 
-	return <div className='w-full h-full flex flex-col'>
-		<div className='flex flex-grow-0 justify-center items-center py-8'>
+	return <>
+		{/* <div className='flex justify-center items-center h-[15vh]'>
 			<div><img src={logo} alt='Rock Fest' className='w-1/6 mx-auto' /></div>
-		</div>
-		<div className='flex flex-wrap flex-grow justify-center items-center'>
+		</div> */}
+		<div className='flex flex-wrap justify-center items-center h-[90vh]'>
 			{
 				myCards.map((card, index) => {
 					return <Card key={index} card={card} flipped={flipped} setFlipped={setFlipped} isClickable={isClickable} pairs={pairs} />
 				})
 			}
 		</div>
-		<div className='flex flex-grow-0 justify-center items-center py-12'>
-			<div className='flex flex-grow flex-col text-pink-600 text-3xl px-12'>
+		<div className='flex justify-center items-center h-[10vh]'>
+			<div className='flex w-1/2 flex-col text-pink-600 text-sm md:text-3xl px-4'>
 				<p>Movimientos: {moves} de {MAX_MOVES}</p>
 				<p>Parejas: {pairs.length} de {MAX_PAIRS}</p>
 			</div>
-			<div className='flex flex-grow-0 px-12'>
+			<div className='flex w-1/2 px-12'>
 				<button
-					className='bg-white w-[320px] h-[90px] mx-auto rounded-2xl btn-shadow'
+					className='bg-white w-full h-auto mx-auto rounded-2xl btn-shadow'
 					onClick={() => setPage(0)}
 				>
 					<img src={btn} alt='Restart' />
 				</button>
 			</div>
 		</div>
-	</div>
+	</>
 }
 
 export default Game
